@@ -11,7 +11,7 @@ def load_qa_model(model_name):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     return model, tokenizer
 
-def grammar_correct(sentence, model, tokenizer, prefix='gec'):
+def grammar_correct(sentence, model, tokenizer, prefix='gec:'):
     sentence = prefix + sentence 
     input_ids = tokenizer.encode(sentence, return_tensors="pt")
     preds = model.generate(
