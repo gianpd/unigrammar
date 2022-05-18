@@ -1,15 +1,19 @@
 import torch
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, AutoModelForQuestionAnswering
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, \
+AutoModelForQuestionAnswering, AutoModelForSeq2SeqLM
 
-def load_s2s_model(model_name):
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+def load_tokenizer_model(model_checkpoint, mode='s2s'):
+    if mode == 's2s':
+        tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
+    elif mode == 'qa':
+        model = AutoModelForQuestionAnswering.from_pretrained(model_checkpoint)
+        tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+    else:
+        raise ValueError("mode must be in (s2s, qa)")
     return model, tokenizer
 
-def load_qa_model(model_name):
-    model = AutoModelForQuestionAnswering.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    return model, tokenizer
 
 def grammar_correct(sentence, model, tokenizer, prefix='gec:'):
     sentence = prefix + sentence 
